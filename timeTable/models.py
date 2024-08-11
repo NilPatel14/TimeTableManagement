@@ -38,6 +38,13 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
+class Faculty(models.Model):
+    name = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
 class Day(models.Model):
     day = models.CharField(max_length=250)
 
@@ -50,8 +57,11 @@ class AssignSubject(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
 class TimeTable(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True) 
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE,null=True)
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.ForeignKey,null=True)
     day = models.ForeignKey(Day, on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()

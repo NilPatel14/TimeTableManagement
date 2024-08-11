@@ -1,38 +1,39 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from timeTable.models import TimeTable, User, Classroom, Subject, Course
-from django.http import HttpResponse
-from django.urls import reverse
-from django.forms import ModelForm
+from timeTable.models import *
+from django.http import Http404
+from .forms import TimetableForm
 
-
-# Define the TimetableForm within views.py
-class TimetableForm(ModelForm):
-    class Meta:
-        model = TimeTable
-        fields = ['subject', 'classroom', 'day', 'start_time', 'end_time']
-
-def new(request):
-    return render(request,'new1.html')
-    
 def index(request):
-    try:
-        bba_course = Course.objects.get(name='BCA')
-    except Course.DoesNotExist:
-        raise Http404("Course not found")
+    return render(request, 'new1.html')
+
     
-    timetables = TimeTable.objects.filter(
-        subject__course=bba_course
-    )
-    return render(request, 'index.html', {'timetables': timetables})
+def timetable(request):
+    courses = Course.objects.all()
+    semesters = Semester.objects.all()
 
+    selected_course_id = request.GET.get('course', None)
+    selected_semester_id = request.GET.get('semester', None)
 
+    filters = {}
+    if selected_course_id:
+        filters['subject__course_id'] = selected_course_id
+    if selected_semester_id:
+        filters['semester_id'] = selected_semester_id
+
+    timetables = TimeTable.objects.filter(**filters)
+
+    return render(request, 'index.html', {
+        'timetables': timetables,
+        'courses': courses,
+        'semesters': semesters
+    })
 
 def timetable_create(request):
     if request.method == 'POST':
         form = TimetableForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('timetable')
     else:
         form = TimetableForm()
     return render(request, 'timetable_form.html', {'form': form})
@@ -43,7 +44,7 @@ def timetable_edit(request, pk):
         form = TimetableForm(request.POST, instance=timetable)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('timetable')
     else:
         form = TimetableForm(instance=timetable)
     return render(request, 'timetable_form.html', {'form': form})
@@ -51,4 +52,4 @@ def timetable_edit(request, pk):
 def timetable_delete(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
     timetable.delete()
-    return redirect('index')
+    return redirect('timetable')

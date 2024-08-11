@@ -1,19 +1,91 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timetable Management System</title>
+    <!-- Bootstrap CSS (Optional for additional styling) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
 </head>
 <body>
-    <h1>Timetable</h1>
-    <a href="{% url 'timetable_create' %}">Create new timetable</a>
-    <ul>
-        {% for timetable in timetables %}
-            <li>
-                {{ timetable.subject }} - {{ timetable.day }} - {{ timetable.start_time }} to {{ timetable.end_time }}
-                <a href="{% url 'timetable_edit' timetable.pk %}">Edit</a>
-                <a href="{% url 'timetable_delete' timetable.pk %}">Delete</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Timetable</h1>
+
+        <!-- Course and Semester selection form -->
+        <div class="form-container">
+            <form method="get" action="{% url 'timetable' %}">
+                <label for="course">Select Course:</label>
+                <select name="course" id="course">
+                    <option value="">--All Courses--</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+                            {{ course.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+                <label for="semester">Select Semester:</label>
+                <select name="semester" id="semester">
+                    <option value="">--All Semesters--</option>
+                    {% for semester in semesters %}
+                        <option value="{{ semester.id }}" {% if request.GET.semester == semester.id|stringformat:"s" %}selected{% endif %}>
+                            {{ semester.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+
+        <a href="{% url 'timetable_create' %}" class="btn btn-primary">Create New Timetable</a>
+
+        <!-- Timetable table -->
+        <div class="table-wrapper">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Subject</th>
+                        <th>Faculty</th>
+                        <th>Classroom</th>
+                        <th>Day</th>
+                        <th>Semester</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for timetable in timetables %}
+                        <tr>
+                            <td>{{ timetable.course }}</td>
+                            <td>{{ timetable.subject }}</td>
+                            <td>{{ timetable.faculty }}</td>
+                            <td>{{ timetable.classroom }}</td>
+                            <td>{{ timetable.day }}</td>
+                            <td>{{ timetable.semester }}</td>
+                            <td>{{ timetable.start_time }}</td>
+                            <td>{{ timetable.end_time }}</td>
+                            <td class="actions">
+                                <a href="{% url 'timetable_edit' timetable.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'timetable_delete' timetable.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="9">No timetables available</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional for additional functionality) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
