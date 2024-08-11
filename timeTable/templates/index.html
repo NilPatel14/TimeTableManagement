@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timetable Management System</title>
+</head>
+<body>
+    <h1>Timetable</h1>
+    <a href="{% url 'timetable_create' %}">Create new timetable</a>
+    <ul>
+        {% for timetable in timetables %}
+            <li>
+                {{ timetable.subject }} - {{ timetable.day }} - {{ timetable.start_time }} to {{ timetable.end_time }}
+                <a href="{% url 'timetable_edit' timetable.pk %}">Edit</a>
+                <a href="{% url 'timetable_delete' timetable.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

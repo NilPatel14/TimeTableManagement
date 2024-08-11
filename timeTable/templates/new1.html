@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TimeTable Management System</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/new1.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <img
+          src="{% static 'images/GLS.jpg' %}"
+          alt="GLS University Logo"
+          width="100"
+        />
+        <ul>
+          <li>
+            <a href="#"><i class="fas fa-graduation-cap"></i> Faculty</a>
+          </li>
+          <li>
+            <a href="#"><i class="far fa-calendar-alt"></i> TimeTable</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-users"></i> Students</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-book"></i> Subjects</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-door-open"></i> ClassRoom</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-cloud-upload-alt"></i> Export file</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content">
+        <div class="header">
+          <h1>TimeTable Management System</h1>
+          <div class="profile">
+            <a href="#" class="profile">
+              <i class="fas fa-user-circle"></i> profile
+            </a>
+          </div>
+        </div>
+
+        <div class="search-container">
+          <input type="text" placeholder="search" class="search-bar" />
+          <button class="search-button">
+            <svg class="search-icon" viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-4.2l-1.4 1.4c-.2.2-.5.2-.7 0l-1.4-1.4c-.2-.2-.2-.5 0-.7l1.4-1.4c.2-.2.5-.2.7 0l1.4 1.4c.2.2.2.5 0 .7l-1.4 1.4c-.2.2-.5.2-.7 0zM19.7 19.7l-1.4-1.4c-.2-.2-.5-.2-.7 0l-1.4 1.4c-.2.2-.2.5 0 .7l1.4 1.4c.2.2.5.2.7 0l1.4-1.4c.2-.2.2-.5 0-.7zM10 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"
+              ></path>
+            </svg>
+            search
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Student Details</h2>
+          <p>View details of all students.</p>
+          <button class="button">View Details</button>
+        </div>
+
+        <div class="card">
+          <h2>12 Faculties</h2>
+          <p>View details of all faculties.</p>
+          <button class="button">View Details</button>
+        </div>
+
+        <div class="card">
+          <h2>Make TimeTable</h2>
+          <p>Create a new timetable.</p>
+          <button class="button">View Details</button>
+        </div>
+
+        <div class="card">
+          <h2>Export File</h2>
+          <p>Export data in various formats.</p>
+          <button class="button">View Details</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
