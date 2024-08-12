@@ -57,11 +57,18 @@ class AssignSubject(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
 class TimeTable(models.Model):
+    TIME_SLOT_CHOICES = [
+        ('07:00-08:30', '07:00 - 08:30'),
+        ('08:30-09:45', '08:30 - 09:45'),
+        ('09:45-10:30', '09:45 - 10:30'),
+        ('10:30-11:30', '10:30 - 11:30'),
+        ('11:30-13:00', '11:30 - 13:00'),
+    ]
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True) 
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE,null=True)
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
     semester = models.ForeignKey(Semester, on_delete=models.ForeignKey,null=True)
     day = models.ForeignKey(Day, on_delete=models.CASCADE)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    time_slot = models.CharField(max_length=20, choices=TIME_SLOT_CHOICES,null=True)
