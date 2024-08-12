@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable</title>
+    <!-- Bootstrap CSS (Optional for additional styling) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 30px;
+            max-width: 800px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #007bff;
+            font-size: 24px;
+        }
+        .table-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        td {
+            background-color: #f8f9fa;
+        }
+        .btn {
+            margin-top: -2px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            color: #ffffff;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Timetable for {{ selected_course.name }} - Semester {{ selected_semester.name }}</h1>
+        <div class="form-container">
+            <form method="get" class="form-inline">
+                <div class="form-group mr-2">
+                    <label for="course" class="sr-only">Course</label>
+                    <select name="course" id="course" class="form-control">
+                        <option value="">Select Course</option>
+                        {% for course in courses %}
+                            <option value="{{ course.id }}" {% if course == selected_course %}selected{% endif %}>{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mr-2">
+                    <label for="semester" class="sr-only">Semester</label>
+                    <select name="semester" id="semester" class="form-control">
+                        <option value="">Select Semester</option>
+                        {% for semester in semesters %}
+                            <option value="{{ semester.id }}" {% if semester == selected_semester %}selected{% endif %}>{{ semester.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time Slot</th>
+                        {% for day in days %}
+                            <th>{{ day.day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in timetable_data %}
+                        <tr>
+                            <td>{{ row.time_slot }}</td>
+                            {% for entry in row.entries %}
+                                <td>
+                                    {% if entry %}
+                                        <strong>{{ entry.subject.name }}</strong><br>
+                                        {{ entry.faculty.name }}<br>
+                                        {{ entry.classroom.name }}
+                                    {% else %}
+                                        &mdash;
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional for additional functionality) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
