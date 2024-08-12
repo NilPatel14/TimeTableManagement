@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    margin-top: 30px;
+    max-width: 800px;
+}
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #007bff;
+    font-size: 24px;
+}
+.table-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    text-align: center;
+    position: relative;
+}
+th {
+    background-color: #007bff;
+    color: #ffffff;
+}
+td {
+    background-color: #f8f9fa;
+}
+td:not(:first-child) {
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+td:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+}
+.edit-delete-buttons, .add-data-button {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    gap: 10px;
+}
+td:hover .edit-delete-buttons, td:hover .add-data-button {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+.edit-delete-buttons i, .add-data-button i {
+    font-size: 16px;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.edit-delete-buttons i:hover, .add-data-button i:hover {
+    color: #0056b3;
+}
+.btn {
+    margin-top: -2px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: #ffffff;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    color: #ffffff;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+.form-container {
+    margin-bottom: 20px;
+}
