@@ -28,15 +28,41 @@ def timetable(request):
         'semesters': semesters
     })
 
+# def timetable_create(request):
+#     if request.method == 'POST':
+#         form = TimetableForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('timetable')
+#     else:
+#         form = TimetableForm()
+#     return render(request, 'timetable_form.html', {'form': form})
+
 def timetable_create(request):
+    course_id = request.GET.get('course')
+    semester_id = request.GET.get('semester')
+    day_id = request.GET.get('day')
+    time_slot = request.GET.get('time_slot')
+
+    initial_data = {}
+    if course_id:
+        initial_data['course'] = course_id
+    if semester_id:
+        initial_data['semester'] = semester_id
+    if day_id:
+        initial_data['day'] = day_id
+    if time_slot:
+        initial_data['time_slot'] = time_slot
+
     if request.method == 'POST':
         form = TimetableForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('timetable')
+            return redirect('showtimetable')
     else:
-        form = TimetableForm()
+        form = TimetableForm(initial=initial_data)
     return render(request, 'timetable_form.html', {'form': form})
+
 
 def timetable_edit(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
@@ -44,7 +70,7 @@ def timetable_edit(request, pk):
         form = TimetableForm(request.POST, instance=timetable)
         if form.is_valid():
             form.save()
-            return redirect('timetable')
+            return redirect('showtimetable')
     else:
         form = TimetableForm(instance=timetable)
     return render(request, 'timetable_form.html', {'form': form})
@@ -52,7 +78,7 @@ def timetable_edit(request, pk):
 def timetable_delete(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
     timetable.delete()
-    return redirect('timetable')
+    return redirect('showtimetable')
 
 
 
