@@ -47,28 +47,26 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>Time</th>
                         <th>Course</th>
                         <th>Subject</th>
                         <th>Faculty</th>
                         <th>Classroom</th>
                         <th>Day</th>
                         <th>Semester</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for timetable in timetables %}
                         <tr>
+                            <td>{{ timetable.time_slot }}</td>
                             <td>{{ timetable.course }}</td>
                             <td>{{ timetable.subject }}</td>
                             <td>{{ timetable.faculty }}</td>
                             <td>{{ timetable.classroom }}</td>
                             <td>{{ timetable.day }}</td>
                             <td>{{ timetable.semester }}</td>
-                            <td>{{ timetable.start_time }}</td>
-                            <td>{{ timetable.end_time }}</td>
                             <td class="actions">
                                 <a href="{% url 'timetable_edit' timetable.pk %}" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="{% url 'timetable_delete' timetable.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>

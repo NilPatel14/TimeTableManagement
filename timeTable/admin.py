@@ -37,7 +37,7 @@ class SubjectAdmin(admin.ModelAdmin):
 
 # Customize the TimeTable admin interface
 class TimeTableAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'day', 'start_time', 'end_time')  # Fields to display in the list view
+    list_display = ('subject', 'day', 'time_slot')  # Fields to display in the list view
     search_fields = ('subject__name', 'day')  # Fields to search in the admin interface
     list_filter = ('day', 'subject')  # Fields to filter in the admin interface
 

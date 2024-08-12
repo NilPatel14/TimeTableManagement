@@ -10,4 +10,5 @@ urlpatterns = [
     path('timetable/create/', views.timetable_create, name='timetable_create'),
     path('timetable/<int:pk>/edit/', views.timetable_edit, name='timetable_edit'),
     path('timetable/<int:pk>/delete/', views.timetable_delete, name='timetable_delete'),
+    path('showtimetable',views.showtimetable,name="showtimetable")
 ] 
