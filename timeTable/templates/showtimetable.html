@@ -7,6 +7,44 @@ Edit
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/showtimetable.css' %}">
 {% endblock css %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function loadSubjects(courseId, semesterId) {
+            var url = "{% url 'ajax_load_subjects' %}";
+            $.ajax({
+                url: url,
+                data: {
+                    'course': courseId,
+                    'semester': semesterId
+                },
+                success: function(data) {
+                    $("#id_subject").html('');  
+                    $.each(data, function(key, value) {
+                        $("#id_subject").append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        }
+
+        var selectedCourseId = $('#id_course').val();
+        var selectedSemesterId = $('#id_semester').val();
+        if (selectedCourseId && selectedSemesterId) {
+            loadSubjects(selectedCourseId, selectedSemesterId);
+        }
+
+        $('#id_course, #id_semester').change(function() {
+            var courseId = $('#id_course').val();
+            var semesterId = $('#id_semester').val();
+            if (courseId && semesterId) {
+                loadSubjects(courseId, semesterId);
+            }
+        });
+    });
+</script>
+
+{% endblock js %}
 
 <div class="header">
     <h1>Timetable for {{ selected_course.name }} - Semester {{ selected_semester.name }}</h1>

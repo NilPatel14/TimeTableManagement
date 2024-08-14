@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Subjects{% endblock title %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/timetable_form.css' %}" />
+{% endblock css %}
+{% block content %}
+<h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Subject</h1>
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_name">Subject Name</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            <label for="id_course">Course</label>
+            {{ form.course }}
+        </div>
+        <div class="form-group">
+            <label for="id_semester">Semester</label>
+            {{ form.semester }}
+        </div>
+        <button type="submit" class="btn btn-success">{% if form.instance.pk %}Update{% else %}Add{% endif %} Subject</button>
+        <a href="{% url 'subject_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+    <br><br><br><br><br><br><br><br><br><br>
+</div>
+
+{% endblock content %}

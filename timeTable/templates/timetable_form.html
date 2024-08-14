@@ -6,6 +6,44 @@ Edit
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/timetable_form.css' %}">
 {% endblock css %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function loadSubjects(courseId, semesterId) {
+            var url = "{% url 'ajax_load_subjects' %}";
+            $.ajax({
+                url: url,
+                data: {
+                    'course': courseId,
+                    'semester': semesterId
+                },
+                success: function(data) {
+                    $("#id_subject").html(''); 
+                    $.each(data, function(key, value) {
+                        $("#id_subject").append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        }
+
+        var selectedCourseId = $('#id_course').val();
+        var selectedSemesterId = $('#id_semester').val();
+        if (selectedCourseId && selectedSemesterId) {
+            loadSubjects(selectedCourseId, selectedSemesterId);
+        }
+
+        $('#id_course, #id_semester').change(function() {
+            var courseId = $('#id_course').val();
+            var semesterId = $('#id_semester').val();
+            if (courseId && semesterId) {
+                loadSubjects(courseId, semesterId);
+            }
+        });
+    });
+</script>
+
+{% endblock js %}
 {% block content %}
 
     <div class="container" >
@@ -14,6 +52,9 @@ Edit
           {% csrf_token %}
           <div class="form-group">
             {{ form.course.label_tag }} {{ form.course }}
+          </div>
+           <div class="form-group">
+            {{ form.semester.label_tag }} {{ form.semester }}
           </div>
           <div class="form-group">
             {{ form.subject.label_tag }} {{ form.subject }}
@@ -25,9 +66,6 @@ Edit
             {{ form.classroom.label_tag }} {{ form.classroom }}
           </div>
           <div class="form-group">{{ form.day.label_tag }} {{ form.day }}</div>
-          <div class="form-group">
-            {{ form.semester.label_tag }} {{ form.semester }}
-          </div>
           <div class="form-group">
             {{ form.time_slot.label_tag }} {{ form.time_slot }}
           </div>
