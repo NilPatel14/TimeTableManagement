@@ -1,22 +1,15 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Timetable Form</title>
-    <!-- Bootstrap CSS (Optional for additional styling) -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/timetable_form.css' %}"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Timetable Form</h1>
-      <div class="form-container">
+{% block title %}
+Edit
+{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/timetable_form.css' %}">
+{% endblock css %}
+{% block content %}
+
+    <div class="container" >
+      <div class="form-container" style="width: -webkit-fill-available;">
         <form method="post">
           {% csrf_token %}
           <div class="form-group">
@@ -45,9 +38,5 @@
         </form>
       </div>
     </div>
+{% endblock content %}
 
-    <!-- Bootstrap JS (Optional for additional functionality) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
-</html>

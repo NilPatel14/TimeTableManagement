@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeTable-{% block title %}{% endblock title %}</title>
+    <!-- Bootsap S -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/new1.css' %}">
+    {% block css %}
+    {% endblock css %}    
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 sidebar" style="padding-bottom:50px;">
+                <img src="{% static 'images/logo_new.jpg' %}" alt="GLS University Logo" class="img-fluid mb-3" >
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'index' %}"><i class="fas fa-graduation-cap"></i> Home</a></li>
+                    <li><a href="{% url 'showtimetable' %}"><i class="far fa-calendar-alt"></i> TimeTable</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Students</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="#"><i class="fas fa-door-open"></i> ClassRoom</a></li>
+                    <li><a href="#"><i class="fas fa-cloud-upload-alt"></i> Export file</a></li>
+                </ul>
+            </div>
+            <div class="col-md-9 col-lg-10 content">
+
+            {% block content%}
+            {% endblock content%}
+
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS and FontAwesome -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
