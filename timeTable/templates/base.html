@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TimeTable-{% block title %}{% endblock title %}</title>
     <!-- Bootsap S -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/new1.css' %}">
 
@@ -20,12 +21,11 @@
             <div class="col-md-3 col-lg-2 sidebar" style="padding-bottom:50px;">
                 <img src="{% static 'images/logo_new.jpg' %}" alt="GLS University Logo" class="img-fluid mb-3" >
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'index' %}"><i class="fas fa-graduation-cap"></i> Home</a></li>
+                    <li><a href="{% url 'admin-index' %}"><i class="fa fa-home"></i> Home</a></li>
                     <li><a href="{% url 'showtimetable' %}"><i class="far fa-calendar-alt"></i> TimeTable</a></li>
                     <li><a href="{% url 'subject_list' %}"><i class="fas fa-book"></i> Subjects</a></li>
-                    <li><a href="{% url 'course' %}"><i class="fas fa-users"></i> Courses</a></li>
-                    <li><a href="#"><i class="fas fa-door-open"></i> ClassRoom</a></li>
-                    <li><a href="#"><i class="fas fa-cloud-upload-alt"></i> Export file</a></li>
+                    <li><a href="{% url 'course' %}"><i class="fas fa-graduation-cap"></i> Courses</a></li>
+                    <li><a href="{% url 'faculty_list' %}"><i class="fas fa-users"></i> Faculties</a></li>
                 </ul>
             </div>
             <div class="col-md-9 col-lg-10 content">
@@ -42,6 +42,5 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </body>
 </html>

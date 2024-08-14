@@ -7,7 +7,7 @@
 {% block content %}
 <h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Subject</h1>
 <div class="form-container">
-    <form method="post">
+    <form method="post">    
         {% csrf_token %}
         <div class="form-group">
             <label for="id_name">Subject Name</label>

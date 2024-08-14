@@ -20,7 +20,9 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('', include('timeTable.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', include('timeTable.urls')),
+    path('admin-master/', admin.site.urls),
+    path('',views.index,name="index"),
+    path('timetable/',views.timetable,name="timetable"),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
