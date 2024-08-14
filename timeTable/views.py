@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from timeTable.models import *
 from django.http import Http404
-from .forms import TimetableForm
+from .forms import *
+from django.http import JsonResponse
 
 def index(request):
     return render(request, 'new1.html')
@@ -27,16 +28,6 @@ def timetable(request):
         'courses': courses,
         'semesters': semesters
     })
-
-# def timetable_create(request):
-#     if request.method == 'POST':
-#         form = TimetableForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('timetable')
-#     else:
-#         form = TimetableForm()
-#     return render(request, 'timetable_form.html', {'form': form})
 
 def timetable_create(request):
     course_id = request.GET.get('course')
@@ -83,7 +74,6 @@ def timetable_delete(request, pk):
 
 
 def showtimetable(request):
-    # Initialize search parameters with default values
     selected_course = None
     selected_semester = None
 
@@ -130,3 +120,92 @@ def showtimetable(request):
         'selected_semester': selected_semester,
     }
     return render(request, 'showtimetable.html', context)
+
+
+def load_subjects(request):
+    course_id = request.GET.get('course')
+    semester_id = request.GET.get('semester')
+    subjects = Subject.objects.filter(course_id=course_id, semester_id=semester_id).order_by('name')
+    return JsonResponse(list(subjects.values('id', 'name')), safe=False)
+
+
+
+def course_list(request):
+    courses = Course.objects.all()
+    return render(request, 'courses.html', {'courses': courses})
+
+def course_create(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('course')
+    else:
+        form = CourseForm()
+    return render(request, 'course_form.html', {'form': form})
+
+def course_edit(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('course')
+    else:
+        form = CourseForm(instance=course)
+    return render(request, 'course_form.html', {'form': form})
+
+def course_delete(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    course.delete()
+    return redirect('course')
+
+
+
+def subject_list(request):
+    course_id = request.GET.get('course')
+    semester_id = request.GET.get('semester')
+    
+    subjects = Subject.objects.all()
+    if course_id:
+        subjects = subjects.filter(course_id=course_id)
+    if semester_id:
+        subjects = subjects.filter(semester_id=semester_id)
+    
+    courses = Course.objects.all()
+    semesters = Semester.objects.all()
+
+    return render(request, 'subject_list.html', {
+        'subjects': subjects,
+        'courses': courses,
+        'semesters': semesters,
+    })
+
+
+def subject_create(request):
+    if request.method == 'POST':
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('subject_list')
+    else:
+        form = SubjectForm()
+    return render(request, 'subject_form.html', {'form': form})
+
+def subject_edit(request, pk):
+    subject = get_object_or_404(Subject, pk=pk)
+    if request.method == 'POST':
+        form = SubjectForm(request.POST, instance=subject)
+        if form.is_valid():
+            form.save()
+            return redirect('subject_list')
+    else:
+        form = SubjectForm(instance=subject)
+    return render(request, 'subject_form.html', {'form': form})
+
+def subject_delete(request, pk):
+    subject = get_object_or_404(Subject, pk=pk)
+    if request.method == 'POST':
+        subject.delete()
+        return redirect('subject_list')
+    return render(request, 'subject_confirm_delete.html', {'subject': subject})
