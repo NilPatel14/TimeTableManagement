@@ -8,32 +8,22 @@ Home
 {% endblock css %}
 {% block content %}
                 <div class="header">
-                    <h1>TimeTable Management System</h1>
+                    <h1 style="color:#1D4F8B">TimeTable Management System</h1>
                     <div class="profile-link">
-                        <a href="#" class="text-primary"><i class="fas fa-user-circle"></i> profile</a>
+                        <a href="{% url 'logout' %}" class="text-primary" onclick="return confirm('Are you sure ?');"><i class="fa fa-sign-out-alt" aria-hidden="true"></i> Sign Out</a>
                     </div>
                 </div>
 
-                <div class="search-container mb-4">
-                    <input type="text" placeholder="search" class="form-control search-bar">
-                    <button class="btn search-button">
-                        <svg class="search-icon" viewBox="0 0 24 24">
-                            <path d="M15.5 14h-4.2l-1.4 1.4c-.2.2-.5.2-.7 0l-1.4-1.4c-.2-.2-.2-.5 0-.7l1.4-1.4c.2-.2.5-.2.7 0l1.4 1.4c.2.2.2.5 0 .7l-1.4 1.4c-.2.2-.5.2-.7 0zM19.7 19.7l-1.4-1.4c-.2-.2-.5-.2-.7 0l-1.4 1.4c-.2.2-.2.5 0 .7l1.4 1.4c.2.2.5.2.7 0l1.4-1.4c.2-.2.2-.5 0-.7zM10 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"></path>
-                        </svg>
-                        search
-                    </button>
-                </div>
-
                 <div class="card">
-                    <h2 class="card-title">Make TimeTable</h2>
-                    <p>Create a new timetable.</p>
+                    <h2 class="card-title">Add / Edit TimeTable</h2>
+                    <p>Create a new or edit timetable.</p>
                     <a href="{% url 'showtimetable' %}">
                         <button class="btn button">View Details</button>
                     </a>
                 </div>
 
                 <div class="card">
-                    <h2 class="card-title">Add/Edit Subjects</h2>
+                    <h2 class="card-title">Add / Edit Subjects</h2>
                     <p>View details of all students.</p>
                     <a href="{% url 'subject_list' %}">
                         <button class="btn button">View Details</button>
@@ -41,22 +31,18 @@ Home
                 </div>
 
                 <div class="card">
-                    <h2 class="card-title">Add/Edit Courses</h2>
-                    <p>View details of all faculties.</p>
+                    <h2 class="card-title">Add / Edit Courses</h2>
+                    <p>View details of all courses.</p>
                     <a href="{% url 'course' %}">
                         <button class="btn button">View Details</button>
                     </a>
                 </div>
-
+                
                 <div class="card">
-                    <h2 class="card-title">Show TimeTable</h2>
-                    <p>Create a new timetable.</p>
-                    <button class="btn button">View Details</button>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-title">Export File</h2>
-                    <p>Export data in various formats.</p>
-                    <button class="btn button">View Details</button>
+                    <h2 class="card-title">Add / Edit Faculty</h2>
+                    <p>View details of all faculties.</p>
+                    <a href="{% url 'faculty_list' %}">
+                        <button class="btn button">View Details</button>
+                    </a>
                 </div>
   {% endblock content %}

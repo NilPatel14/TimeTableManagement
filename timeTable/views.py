@@ -3,11 +3,16 @@ from timeTable.models import *
 from django.http import Http404
 from .forms import *
 from django.http import JsonResponse
+from django.contrib.auth.decorators import user_passes_test
 
+def admin_required(user):
+    return user.is_superuser
+
+@user_passes_test(admin_required)
 def index(request):
     return render(request, 'new1.html')
 
-    
+@user_passes_test(admin_required)
 def timetable(request):
     courses = Course.objects.all()
     semesters = Semester.objects.all()
@@ -29,6 +34,7 @@ def timetable(request):
         'semesters': semesters
     })
 
+@user_passes_test(admin_required)
 def timetable_create(request):
     course_id = request.GET.get('course')
     semester_id = request.GET.get('semester')
@@ -54,7 +60,7 @@ def timetable_create(request):
         form = TimetableForm(initial=initial_data)
     return render(request, 'timetable_form.html', {'form': form})
 
-
+@user_passes_test(admin_required)
 def timetable_edit(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
     if request.method == 'POST':
@@ -66,13 +72,14 @@ def timetable_edit(request, pk):
         form = TimetableForm(instance=timetable)
     return render(request, 'timetable_form.html', {'form': form})
 
+@user_passes_test(admin_required)
 def timetable_delete(request, pk):
     timetable = get_object_or_404(TimeTable, pk=pk)
     timetable.delete()
     return redirect('showtimetable')
 
 
-
+@user_passes_test(admin_required)
 def showtimetable(request):
     selected_course = None
     selected_semester = None
@@ -121,7 +128,7 @@ def showtimetable(request):
     }
     return render(request, 'showtimetable.html', context)
 
-
+@user_passes_test(admin_required)
 def load_subjects(request):
     course_id = request.GET.get('course')
     semester_id = request.GET.get('semester')
@@ -129,11 +136,12 @@ def load_subjects(request):
     return JsonResponse(list(subjects.values('id', 'name')), safe=False)
 
 
-
+@user_passes_test(admin_required)
 def course_list(request):
     courses = Course.objects.all()
     return render(request, 'courses.html', {'courses': courses})
 
+@user_passes_test(admin_required)
 def course_create(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
@@ -144,6 +152,7 @@ def course_create(request):
         form = CourseForm()
     return render(request, 'course_form.html', {'form': form})
 
+@user_passes_test(admin_required)
 def course_edit(request, pk):
     course = get_object_or_404(Course, pk=pk)
     if request.method == 'POST':
@@ -155,13 +164,14 @@ def course_edit(request, pk):
         form = CourseForm(instance=course)
     return render(request, 'course_form.html', {'form': form})
 
+@user_passes_test(admin_required)
 def course_delete(request, pk):
     course = get_object_or_404(Course, pk=pk)
     course.delete()
     return redirect('course')
 
 
-
+@user_passes_test(admin_required)
 def subject_list(request):
     course_id = request.GET.get('course')
     semester_id = request.GET.get('semester')
@@ -181,7 +191,7 @@ def subject_list(request):
         'semesters': semesters,
     })
 
-
+@user_passes_test(admin_required)
 def subject_create(request):
     if request.method == 'POST':
         form = SubjectForm(request.POST)
@@ -192,6 +202,7 @@ def subject_create(request):
         form = SubjectForm()
     return render(request, 'subject_form.html', {'form': form})
 
+@user_passes_test(admin_required)
 def subject_edit(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     if request.method == 'POST':
@@ -203,9 +214,60 @@ def subject_edit(request, pk):
         form = SubjectForm(instance=subject)
     return render(request, 'subject_form.html', {'form': form})
 
+
+@user_passes_test(admin_required)
 def subject_delete(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     if request.method == 'POST':
         subject.delete()
         return redirect('subject_list')
     return render(request, 'subject_confirm_delete.html', {'subject': subject})
+
+@user_passes_test(admin_required)
+def faculty_list(request):
+    course_id = request.GET.get('course')
+    semester_id = request.GET.get('semester')
+    
+    faculties = Faculty.objects.all()
+    if course_id:
+        faculties = faculties.filter(subject__course_id=course_id).distinct()
+    if semester_id:
+        faculties = faculties.filter(subject__semester_id=semester_id).distinct()
+    
+    courses = Course.objects.all()
+    semesters = Semester.objects.all()
+
+    return render(request, 'faculty_list.html', {
+        'faculties': faculties,
+        'courses': courses,
+        'semesters': semesters,
+    })
+
+@user_passes_test(admin_required)
+def faculty_create(request):
+    if request.method == 'POST':
+        form = FacultyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('faculty_list')
+    else:
+        form = FacultyForm()
+    return render(request, 'faculty_form.html', {'form': form})
+
+@user_passes_test(admin_required)
+def faculty_edit(request, pk):
+    faculty = get_object_or_404(Faculty, pk=pk)
+    if request.method == 'POST':
+        form = FacultyForm(request.POST, instance=faculty)
+        if form.is_valid():
+            form.save()
+            return redirect('faculty_list')
+    else:
+        form = FacultyForm(instance=faculty)
+    return render(request, 'faculty_form.html', {'form': form})
+
+@user_passes_test(admin_required)
+def faculty_delete(request, pk):
+    faculty = get_object_or_404(Faculty, pk=pk)
+    faculty.delete()
+    return redirect('faculty_list')

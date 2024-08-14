@@ -39,3 +39,8 @@ class SubjectForm(forms.ModelForm):
             'course': forms.Select(attrs={'class': 'form-control'}),
             'semester': forms.Select(attrs={'class': 'form-control'}),
         }
+
+class FacultyForm(forms.ModelForm):
+    class Meta:
+        model = Faculty
+        fields = ['name']
