@@ -24,6 +24,7 @@ header {
 
 .table {
     margin-top: 20px;
+    color:blue;
 }
 
 .table th, .table td {
