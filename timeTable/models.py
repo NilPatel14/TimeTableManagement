@@ -65,10 +65,15 @@ class TimeTable(models.Model):
         ('11:30-12:30', '11:30 - 12:30'),
     ]
 
+    DIVISION_CHOICES = [
+        ('A', 'A'),
+        ('B', 'B')
+    ]
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True) 
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE,null=True)
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    division = models.CharField(max_length=10, choices=DIVISION_CHOICES, null=True)
     semester = models.ForeignKey(Semester, on_delete=models.ForeignKey,null=True)
     day = models.ForeignKey(Day, on_delete=models.CASCADE)
     time_slot = models.CharField(max_length=20, choices=TIME_SLOT_CHOICES,null=True)

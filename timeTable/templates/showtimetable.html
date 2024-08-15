@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Edit
+    Timetable
 {% endblock title %}
-{% block content %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/showtimetable.css' %}">
+    <link rel="stylesheet" href="{% static 'css/showtimetable.css' %}">
 {% endblock css %}
 {% block js %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        function loadSubjects(courseId, semesterId) {
+        function loadSubjects(courseId, semesterId, divisionId) {
             var url = "{% url 'ajax_load_subjects' %}";
             $.ajax({
                 url: url,
                 data: {
                     'course': courseId,
-                    'semester': semesterId
+                    'semester': semesterId,
+                    'division': divisionId
                 },
                 success: function(data) {
                     $("#id_subject").html('');  
@@ -28,32 +28,33 @@ Edit
             });
         }
 
-        var selectedCourseId = $('#id_course').val();
-        var selectedSemesterId = $('#id_semester').val();
-        if (selectedCourseId && selectedSemesterId) {
-            loadSubjects(selectedCourseId, selectedSemesterId);
-        }
-
-        $('#id_course, #id_semester').change(function() {
+        function updateSubjects() {
             var courseId = $('#id_course').val();
             var semesterId = $('#id_semester').val();
-            if (courseId && semesterId) {
-                loadSubjects(courseId, semesterId);
+            var divisionId = $('#id_division').val();
+            if (courseId && semesterId && divisionId) {
+                loadSubjects(courseId, semesterId, divisionId);
             }
-        });
+        }
+
+        // Initial load of subjects if fields are already populated
+
+        // Update subjects on field change
+        $('#id_course, #id_semester, #id_division').change(updateSubjects);
     });
 </script>
-
 {% endblock js %}
 
+{% block content %}
 <div class="header">
     <h1>Timetable for {{ selected_course.name }} - Semester {{ selected_semester.name }}</h1>
 </div>
+
 <div class="form-container">
     <form method="get" class="form-inline">
         <div class="form-group mr-2">
             <label for="course" class="sr-only">Course</label>
-            <select name="course" id="course" class="form-control">
+            <select name="course" id="id_course" class="form-control">
                 <option value="">Select Course</option>
                 {% for course in courses %}
                     <option value="{{ course.id }}" {% if course == selected_course %}selected{% endif %}>{{ course.name }}</option>
@@ -62,16 +63,26 @@ Edit
         </div>
         <div class="form-group mr-2">
             <label for="semester" class="sr-only">Semester</label>
-            <select name="semester" id="semester" class="form-control">
+            <select name="semester" id="id_semester" class="form-control">
                 <option value="">Select Semester</option>
                 {% for semester in semesters %}
                     <option value="{{ semester.id }}" {% if semester == selected_semester %}selected{% endif %}>{{ semester.name }}</option>
                 {% endfor %}
             </select>
         </div>
+        <div class="form-group mr-2">
+            <label for="division" class="sr-only">Division</label>
+            <select name="division" id="id_division" class="form-control">
+                <option value="">Select Division</option>
+                {% for division in divisions %}
+                    <option value="{{ division }}" {% if division == selected_division %}selected{% endif %}>{{ division }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Search</button>
     </form>
 </div>
+
 <div class="table-container">
     <table>
         <thead>
@@ -123,5 +134,7 @@ Edit
         </tbody>
     </table>
 </div>
-          <br><br><br><br><br><br><br><br> 
+
+<br><br><br><br><br><br><br><br>
+
 {% endblock content %}
