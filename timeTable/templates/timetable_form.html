@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Edit
+    Edit
 {% endblock title %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/timetable_form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/timetable_form.css' %}">
 {% endblock css %}
 {% block js %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        function loadSubjects(courseId, semesterId) {
+        function loadSubjects(courseId, semesterId, divisionId) {
             var url = "{% url 'ajax_load_subjects' %}";
             $.ajax({
                 url: url,
                 data: {
                     'course': courseId,
-                    'semester': semesterId
+                    'semester': semesterId,
+                    'division': divisionId
                 },
                 success: function(data) {
                     $("#id_subject").html(''); 
@@ -27,54 +28,74 @@ Edit
             });
         }
 
-        var selectedCourseId = $('#id_course').val();
-        var selectedSemesterId = $('#id_semester').val();
-        if (selectedCourseId && selectedSemesterId) {
-            loadSubjects(selectedCourseId, selectedSemesterId);
-        }
-
-        $('#id_course, #id_semester').change(function() {
+        function updateSubjects() {
             var courseId = $('#id_course').val();
             var semesterId = $('#id_semester').val();
-            if (courseId && semesterId) {
-                loadSubjects(courseId, semesterId);
+            var divisionId = $('#id_division').val();
+            if (courseId && semesterId && divisionId) {
+                loadSubjects(courseId, semesterId, divisionId);
             }
-        });
+        }
+
+        var selectedCourseId = $('#id_course').val();
+        var selectedSemesterId = $('#id_semester').val();
+        var selectedDivisionId = $('#id_division').val();
+        if (selectedCourseId && selectedSemesterId && selectedDivisionId) {
+            loadSubjects(selectedCourseId, selectedSemesterId, selectedDivisionId);
+        }
+
+        $('#id_course, #id_semester, #id_division').change(updateSubjects);
     });
 </script>
-
 {% endblock js %}
 {% block content %}
-
-    <div class="container" >
-      <div class="form-container" style="width: -webkit-fill-available;">
-        <form method="post">
-          {% csrf_token %}
-          <div class="form-group">
-            {{ form.course.label_tag }} {{ form.course }}
-          </div>
-           <div class="form-group">
-            {{ form.semester.label_tag }} {{ form.semester }}
-          </div>
-          <div class="form-group">
-            {{ form.subject.label_tag }} {{ form.subject }}
-          </div>
-          <div class="form-group">
-            {{ form.faculty.label_tag }} {{ form.faculty }}
-          </div>
-          <div class="form-group">
-            {{ form.classroom.label_tag }} {{ form.classroom }}
-          </div>
-          <div class="form-group">{{ form.day.label_tag }} {{ form.day }}</div>
-          <div class="form-group">
-            {{ form.time_slot.label_tag }} {{ form.time_slot }}
-          </div>
-          <div class="btn-group">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a href="{% url 'showtimetable' %}" class="btn btn-secondary">Cancel</a>
-          </div>
-        </form>
-      </div>
+    <div class="container">
+        <div class="form-container" style="width: -webkit-fill-available;">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.course.label_tag }} {{ form.course }}
+                </div>
+                <div class="form-group">
+                    {{ form.semester.label_tag }} {{ form.semester }}
+                </div>
+                <div class="form-group">
+                    {{ form.division.label_tag }} {{ form.division }}
+                </div>
+                <div class="form-group">
+                    {{ form.subject.label_tag }} {{ form.subject }}
+                </div>
+                <div class="form-group">
+                    {{ form.faculty.label_tag }} {{ form.faculty }}
+                </div>
+                <div class="form-group">
+                    {{ form.classroom.label_tag }} {{ form.classroom }}
+                </div>
+                <div class="form-group">
+                    {{ form.day.label_tag }} {{ form.day }}
+                </div>
+                <div class="form-group">
+                    {{ form.time_slot.label_tag }} {{ form.time_slot }}
+                </div>
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{% url 'showtimetable' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock content %}
-

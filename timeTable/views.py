@@ -38,6 +38,7 @@ def timetable(request):
 def timetable_create(request):
     course_id = request.GET.get('course')
     semester_id = request.GET.get('semester')
+    division_id = request.GET.get('division')
     day_id = request.GET.get('day')
     time_slot = request.GET.get('time_slot')
 
@@ -46,6 +47,8 @@ def timetable_create(request):
         initial_data['course'] = course_id
     if semester_id:
         initial_data['semester'] = semester_id
+    if division_id:
+        initial_data['division'] = division_id
     if day_id:
         initial_data['day'] = day_id
     if time_slot:
@@ -58,6 +61,7 @@ def timetable_create(request):
             return redirect('showtimetable')
     else:
         form = TimetableForm(initial=initial_data)
+    
     return render(request, 'timetable_form.html', {'form': form})
 
 @user_passes_test(admin_required)
@@ -83,27 +87,34 @@ def timetable_delete(request, pk):
 def showtimetable(request):
     selected_course = None
     selected_semester = None
+    selected_division = None
 
     if request.method == 'GET':
         selected_course_id = request.GET.get('course')
         selected_semester_id = request.GET.get('semester')
+        selected_division = request.GET.get('division')  # Get the selected division
         
-        # Fetch selected course and semester if provided
+        # Fetch selected course, semester, and division if provided
         if selected_course_id:
             selected_course = Course.objects.get(id=selected_course_id)
         if selected_semester_id:
             selected_semester = Semester.objects.get(id=selected_semester_id)
+        if not selected_division:
+            selected_division = 'A'  # Default to division 'A' if none is selected
     
-    # Default to the first course and semester if none is selected
+    # Default to the first course, semester, and division if none is selected
     if not selected_course:
         selected_course = Course.objects.first()
     if not selected_semester:
         selected_semester = Semester.objects.first()
+    if not selected_division:
+        selected_division = 'A'
 
-    # Retrieve timetable entries based on selected course and semester
+    # Retrieve timetable entries based on selected course, semester, and division
     timetable_entries = TimeTable.objects.filter(
         course=selected_course,
-        semester=selected_semester
+        semester=selected_semester,
+        division=selected_division
     )
     
     days = Day.objects.all()  # Fetch all Day objects
@@ -125,15 +136,23 @@ def showtimetable(request):
         'semesters': Semester.objects.all(),
         'selected_course': selected_course,
         'selected_semester': selected_semester,
+        'selected_division': selected_division,
+        'divisions': ['A', 'B']  # Assuming divisions are A and B
     }
     return render(request, 'showtimetable.html', context)
+
 
 @user_passes_test(admin_required)
 def load_subjects(request):
     course_id = request.GET.get('course')
     semester_id = request.GET.get('semester')
-    subjects = Subject.objects.filter(course_id=course_id, semester_id=semester_id).order_by('name')
-    return JsonResponse(list(subjects.values('id', 'name')), safe=False)
+    subjects = Subject.objects.filter(course_id=course_id, semester_id=semester_id)
+
+    data = [{'id': subject.id, 'name': subject.name} for subject in subjects]
+    return JsonResponse(data, safe=False)
+
+
+
 
 
 @user_passes_test(admin_required)
